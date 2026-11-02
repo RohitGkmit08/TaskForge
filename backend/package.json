@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "worker": "node src/workers/csvImport.worker.js"
   },
   "keywords": [
     "bullmq",
@@ -17,8 +18,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bullmq": "^6.5.3",
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
+    "ioredis": "^6.0.0",
     "mongoose": "^9.11.4"
   },
   "devDependencies": {
