@@ -27,3 +27,17 @@ coverage/
 Thumbs.db
 .vscode/
 .idea/
+
+# Local test & scratch files
+backpressure.js
+chain-output.txt
+chain-transform.js
+inspect-queue.js
+output.txt
+pipe.js
+sample.txt
+streams.js
+test-queue.js
+transform.js
+uppercase.txt
+
