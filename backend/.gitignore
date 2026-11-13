@@ -37,6 +37,7 @@ output.txt
 pipe.js
 sample.txt
 streams.js
+test-batches.js
 test-queue.js
 transform.js
 uppercase.txt
