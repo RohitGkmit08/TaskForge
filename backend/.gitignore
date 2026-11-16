@@ -39,6 +39,16 @@ sample.txt
 streams.js
 test-batches.js
 test-queue.js
+test-*.js
+src/test-*.js
+src/test-csv.js
+src/test-csv2.js
 transform.js
 uppercase.txt
+
+# CSV & sample files
+*.csv
+sample.csv
+src/sample.csv
+
 
