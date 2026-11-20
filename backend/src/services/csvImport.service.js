@@ -1,3 +1,4 @@
+const {validateAndTransformRecord,} = require("../validator/csvValidator.js");
 
 async function* createBatches(records, batchSize) {
     // Start with an empty array.
@@ -22,4 +23,73 @@ async function* createBatches(records, batchSize) {
   }
 }
 
-module.exports = {createBatches};
+/** So, if we wrote this function in normal function - 
+ * 
+  function createBatches(records, batchSize) {
+  const allBatches = [];
+  let batch = [];
+
+  for (const record of records) {
+    batch.push(record);
+
+    if (batch.length === batchSize) {
+      allBatches.push(batch);
+      batch = [];
+    }
+  }
+
+  if (batch.length > 0) {
+    allBatches.push(batch);
+  }
+
+  return allBatches;
+}
+
+const batches = createBatches([1, 2, 3, 4, 5, 6, 7], 3);
+console.log(batches);  -> [[1, 2, 3], [4, 5, 6], [7]]
+
+- for small data, this example would work
+- async function* when the data is big or arrives slowly, which is common in backend and IoT work.
+ * 
+ */
+
+async function* validateRecords(records, onInvalidRecord){
+  let recordNumber = 0;
+
+  for await (const record of records){
+    recordNumber++;
+
+    const result = validateAndTransformRecord(record);
+
+    if(!result.valid){
+/**
+ * 1. Call onInvalidRecord with the details: which number it was, the original record and what was wrong. 
+ * It’s awaited in case reporting takes time, like writing to a database.
+ * 
+ * 2. continue means skip the rest of this loop iteration and go straight to the next record. 
+ * So the yield below never runs for a bad record.
+ */
+      await onInvalidRecord({
+        recordNumber,
+        record,
+        errors: result.errors
+      });
+      continue;
+
+    }
+    yield result.data;
+  }
+}
+module.exports = {createBatches, validateRecords};
+
+
+/**
+ex - 1: { temp: "25" }  ALLOWED
+2: { temp: "abc" }   NOT ALLOWED
+3: { temp: "30" }    ALLOWED
+
+record 1 → valid   → yield { temp: 25 }
+record 2 → invalid → onInvalidRecord({ recordNumber: 2, record: { temp: "abc" }, errors: ... })
+                   → continue (skip)
+record 3 → valid   → yield { temp: 30 }
+ */
