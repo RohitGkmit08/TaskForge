@@ -1,4 +1,5 @@
 const {validateAndTransformRecord,} = require("../validator/csvValidator.js");
+const ImportedRecord = require("../models/ImportedRecord.js");     
 
 async function* createBatches(records, batchSize) {
     // Start with an empty array.
@@ -80,8 +81,6 @@ async function* validateRecords(records, onInvalidRecord){
     yield result.data;
   }
 }
-module.exports = {createBatches, validateRecords};
-
 
 /**
 ex - 1: { temp: "25" }  ALLOWED
@@ -93,3 +92,16 @@ record 2 → invalid → onInvalidRecord({ recordNumber: 2, record: { temp: "abc
                    → continue (skip)
 record 3 → valid   → yield { temp: 30 }
  */
+
+async function persistBatch(batch, jobId) {
+  // .map() creates a new array, Copies each record's existing properties using spread syntax.
+  // Adds the same jobId to every record.
+  const documents = batch.map((record) => ({
+    ...record,
+    jobId,
+  }));
+
+  const insertedRecords = await ImportedRecord.insertMany(documents);
+  return insertedRecords;
+}
+module.exports = {createBatches, validateRecords, persistBatch};
