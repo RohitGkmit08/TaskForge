@@ -430,7 +430,7 @@ The worker process (`backend/src/workers/csvImport.worker.js`):
 The `backend/` directory includes helper scripts for diagnosing queues and experimenting with Node.js stream architectures:
 
 ### Queue Diagnostics
-- **`node test-queue.js`**: Connects to the Redis queue instance, calls `csvImportQueue.waitUntilReady()`, logs connection readiness, and safely closes the queue connection.
+- **`node test-queue-connection.js`**: Connects to the Redis queue instance, calls `csvImportQueue.waitUntilReady()`, logs connection readiness, and safely closes the queue connection.
 - **`node inspect-queue.js`**: Fetches a job by ID from BullMQ using `csvImportQueue.getJob(id)` and prints its internal state (`waiting`, `active`, `completed`, `failed`), name, and stored payload.
 
 ### Node.js Stream Foundations
@@ -455,7 +455,7 @@ To verify the end-to-end flow locally:
 2. **Test Queue Connectivity**:
    ```bash
    cd backend
-   node test-queue.js
+   node test-queue-connection.js
    # Output: BullMQ queue connected to Redis successfully
    ```
 
