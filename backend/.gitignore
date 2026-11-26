@@ -37,15 +37,16 @@ output.txt
 pipe.js
 sample.txt
 streams.js
-test-batches.js
-test-csv-validation.js
-test-queue.js
+test-batch-generator.js
+test-persist-batch-mongodb.js
+test-queue-connection.js
+test-csv-validation-and-batching.js
 test-*.js
 src/test-*.js
-src/test-csv.js
-src/test-csv2.js
-src/test-csv-validation.js
-src/test-validator.js
+src/test-csv-stream-parsing.js
+src/test-csv-stream-batching.js
+src/test-csv-record-validator-unit.js
+src/test-e2e-csv-import-pipeline.js
 transform.js
 uppercase.txt
 
